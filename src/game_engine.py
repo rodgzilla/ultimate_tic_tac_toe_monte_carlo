@@ -77,7 +77,21 @@ class TestGameEngine(unittest.TestCase):
     def test_get_local_board(self):
         pass
 
-    def test_get_possible_next_move(self):
+    def test_get_possible_next_move_initial(self):
+        state          = GameState()
+        possible_moves = {
+            (grid_x, grid_y, cell_x, cell_y)
+            for grid_x in range(3)
+            for grid_y in range(3)
+            for cell_x in range(3)
+            for cell_y in range(3)
+        }
+        self.assertEqual(set(state.get_possible_next_move()), possible_moves)
+
+    def test_get_possible_next_move_single_grid(self):
+        pass
+
+    def test_get_possible_next_move_multi_grid(self):
         pass
 
     def test_is_finished(self):
