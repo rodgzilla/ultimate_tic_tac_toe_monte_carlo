@@ -19,7 +19,6 @@ class GameState():
             for cell_y in range(3)
         }
         self.finished    = False
-        self.move_number = 0
         self.winner      = None
 
     def _check_victory(self, grid_x, grid_y, cell_x, cell_y):
@@ -98,7 +97,6 @@ class GameState():
             raise ValueError('Cell already occupied.')
 
         self.board[grid_x][grid_y][cell_x][cell_y] = self.player
-        self.move_number += 1
 
         if self._check_victory(grid_x, grid_y, cell_x, cell_y):
             self.board[grid_x][grid_y] = self.player
@@ -111,6 +109,9 @@ class GameState():
 
     def get_possible_next_move(self):
         return self.possible_moves
+
+    def get_player(self):
+        return self.player
 
     def is_finished(self):
         return self.finished
