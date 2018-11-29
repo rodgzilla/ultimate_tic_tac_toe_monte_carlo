@@ -11,6 +11,7 @@ class GameState():
                 ] for _ in range(3)   # line of big grid
             ] for _ in range(3)       # big grid
         ]
+        self.is_finished = False
         # self.board = [[[[None, None, None], [None, None, None], [0, None, None]],
         #                1,
         #                [[None, None, None], [None, None, None], [None, 1, None]]],
@@ -22,13 +23,21 @@ class GameState():
         #                [[0, None, None], [None, None, None], [None, None, None]]]]
 
     def play(self, grid_x, grid_y, cell_x, cell_y):
-        pass
+        if not (0 <= grid_x <= 2) or \
+           not (0 <= grid_y <= 2) or \
+           not (0 <= cell_x <= 2) or \
+           not (0 <= cell_y <= 2):
+            raise ValueError('Coordinates must be in [0, 1, 2].')
 
-    def get_global_board(self):
-        pass
+        if isinstance(self.board[grid_x][grid_y], int):
+            raise ValueError('Not possible to play in won grid.')
 
-    def get_local_board(self):
-        pass
+        if self.board[grid_x][grid_y][cell_x][cell_y] is not None:
+            raise ValueError('Cell already occupied.')
+
+        self.board[grid_x][grid_y][cell_x][cell_y] = self.player
+        self.player = 1 - self.player
+        # TODO: check victory
 
     def get_possible_next_move(self):
         return []
@@ -66,7 +75,12 @@ class GameState():
 class TestGameEngine(unittest.TestCase):
     def test_play(self):
         state = GameState()
+        with self.assertRaises(ValueError):
+            state.play(-5, 0, 10, 15)
+
+        self.assertEqual(state.player, 0)
         state.play(0, 0, 0, 0)
+        self.assertEqual(state.player, 1)
         with self.assertRaises(ValueError):
             state.play(0, 0, 0, 0)
 
