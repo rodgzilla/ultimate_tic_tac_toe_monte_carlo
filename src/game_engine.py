@@ -37,13 +37,24 @@ class GameState():
     def _check_finished(self, grid_x, grid_y):
         player = self.board[grid_x][grid_y]
 
-        if all(self.board[grid_x][i] == player for i in range(3)) or \
+        if isinstance(player, int) and \
+           (all(self.board[grid_x][i] == player for i in range(3)) or \
            all(self.board[i][grid_y] == player for i in range(3)) or \
            all(self.board[i][i]      == player for i in range(3)) or \
-           all(self.board[i][2 - i]  == player for i in range(3)):
-            return True
+           all(self.board[i][2 - i]  == player for i in range(3))):
+            return True, player
 
-        return False
+        for g_x in range(3):
+            for g_y in range(3):
+                if isinstance(self.board[g_x][g_y], int):
+                    continue
+                for cell_x in range(3):
+                    for cell_y in range(3):
+                        if self.board[g_x][g_y][cell_x][cell_y] is None:
+                            return False, None
+
+
+        return True, None
 
     def _update_possible_moves(self, grid_x, grid_y):
         self.possible_moves = set()
@@ -91,11 +102,7 @@ class GameState():
 
         if self._check_victory(grid_x, grid_y, cell_x, cell_y):
             self.board[grid_x][grid_y] = self.player
-            if self._check_finished(grid_x, grid_y):
-                self.finished = True
-                self.winner = self.player
-            if self.move_number == 89:
-                self.finished = True
+        self.finished, self.winner = self._check_finished(grid_x, grid_y)
 
         if not self.finished:
             self._update_possible_moves(cell_x, cell_y)
