@@ -1,15 +1,5 @@
 import unittest
 
-        # self.board = [[[[None, None, None], [None, None, None], [0, None, None]],
-        #                1,
-        #                [[None, None, None], [None, None, None], [None, 1, None]]],
-        #               [[[0, None, None], [None, None, None], [None, None, None]],
-        #                [[None, None, None], [None, None, None], [None, None, None]],
-        #                0],
-        #               [[[None, None, None], [None, None, None], [None, None, None]],
-        #                [[None, None, None], [None, None, None], [None, None, None]],
-        #                [[0, None, None], [None, None, None], [None, None, None]]]]
-
 class GameState():
     def __init__(self):
         self.player = 0
@@ -72,7 +62,8 @@ class GameState():
         else:
             for cell_x in range(3):
                 for cell_y in range(3):
-                    self.possible_moves.add((grid_x, grid_y, cell_x, cell_y))
+                    if self.board[grid_x][grid_y][cell_x][cell_y] is None:
+                        self.possible_moves.add((grid_x, grid_y, cell_x, cell_y))
 
 
     def play(self, grid_x, grid_y, cell_x, cell_y):
